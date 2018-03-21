@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllPosts } from '../../services/ReadableAPI';
+import { loadPosts } from './actions';
 
 class posts extends React.Component {
   static propTypes = {};
@@ -10,10 +10,7 @@ class posts extends React.Component {
   };
 
   componentDidMount() {
-    getAllPosts().then(res => {
-      this.setState({ posts: res });
-      console.log(this.state.posts);
-    });
+    this.props.getAllPosts();
   }
 
   render = () => (
@@ -55,8 +52,14 @@ class posts extends React.Component {
   );
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => {
+  return {
+    posts: state.postReducer.posts,
+  };
+};
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  getAllPosts: loadPosts,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(posts);
