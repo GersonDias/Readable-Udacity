@@ -1,13 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadPosts } from './actions';
+import { PropTypes } from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class posts extends React.Component {
-  static propTypes = {};
+  static propTypes = {
+    getAllPosts: PropTypes.func.isRequired,
+    posts: PropTypes.array.isRequired,
+  };
 
   componentDidMount() {
     this.props.getAllPosts();
   }
+
+  onEditPost = postId => {
+    this.props.history.push(`/posts/${postId}`);
+  };
 
   render = () => {
     return (
@@ -29,14 +38,20 @@ class posts extends React.Component {
             {this.props.posts.map(post => {
               return (
                 <tr key={post.id}>
-                  <td>{post.title}</td>
+                  <td>
+                    <Link to={`/${post.category}/${post.id}`}>
+                      {post.title}
+                    </Link>
+                  </td>
                   <td>{post.author}</td>
                   <td>{post.category}</td>
                   <td>{post.commentCount}</td>
                   <td>{post.voteScore}</td>
                   <td>Voting</td>
                   <td>
-                    <button>Edit</button>
+                    <button onClick={() => this.onEditPost(post.id)}>
+                      Edit
+                    </button>
                     <button>Delete</button>
                   </td>
                 </tr>
